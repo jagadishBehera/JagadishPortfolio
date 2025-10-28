@@ -1,80 +1,82 @@
-import React, { useEffect, useState } from "react";
-import { ReactTyped } from "react-typed";
+import React, { useState, useEffect } from "react";
 
-const Hero = () => {
-  const [offsetY, setOffsetY] = useState(0);
+const HeroSection = () => {
+  const data = [
+    "a Web Developer",
+    "a Freelancer",
+    "a UI/UX Enthusiast",
+    "a React.js Specialist",
+    "a Frontend Engineer",
+    "helping businesses grow online",
+    "building digital experiences",
+    "crafting responsive websites",
+    "turning ideas into reality",
+    "creating modern web solutions",
+    "empowering startups with tech",
+    "your next tech partner",
+    "the developer who cares about results"
+  ];
+  
 
-  const handleScroll = () => setOffsetY(window.scrollY);
+  const [index, setIndex] = useState(0);
+  const [identity, setIdentity] = useState(data[0]);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % data.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [data.length]);
+
+  useEffect(() => {
+    setIdentity(data[index]);
+  }, [index, data]);
 
   return (
-    <section
-      id="hero"
-      className="relative h-screen flex flex-col justify-center items-center text-center px-6 overflow-hidden"
-    >
-      {/* Background - Light Mode */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-fixed transition-opacity duration-700 opacity-100 dark:opacity-0"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1600&q=80')",
-          transform: `translateY(${offsetY * 0.4}px) scale(${1 + offsetY * 0.0005})`,
-        }}
-      ></div>
+    <div className="relative flex items-center justify-center min-h-screen bg-white text-[rgb(60,60,80)] font-extrabold text-5xl overflow-hidden">
+      {/* Main Section */}
+      <section
+        data-identity={identity}
+        className="relative z-10 after:content-[attr(data-identity)] after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:uppercase after:text-[#EAEAF2] after:text-[2.5em] after:tracking-[0.5em] after:z-[-1] after:animate-[letterAnim_4.5s_ease-in-out_infinite]"
+      >
+        <blockquote className="text-center">
+          I am <span className="font-[Libre_Baskerville] italic text-yellow-400 inline-block">{identity}</span>
+        </blockquote>
+      </section>
 
-      {/* Background - Dark Mode */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-fixed transition-opacity duration-700 opacity-0 dark:opacity-100"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1520975918318-3cc9c3f2ad8b?auto=format&fit=crop&w=1600&q=80')",
-          transform: `translateY(${offsetY * 0.4}px) scale(${1 + offsetY * 0.0005})`,
-        }}
-      ></div>
-
-      {/* Yellow Glow Overlay (subtle in dark mode so image stays visible) */}
-      <div className="absolute inset-0 bg-yellow-300/15 dark:bg-yellow-200/5 mix-blend-overlay transition-colors duration-700"></div>
-
-      {/* Content */}
-      <div className="relative z-10 max-w-3xl">
-        <h1
-          data-aos="fade-up"
-          className="text-5xl md:text-7xl font-extrabold mb-6 drop-shadow-xl text-white dark:text-yellow-100"
-        >
-          Hi, I’m{" "}
-          <span className="text-yellow-300 dark:text-yellow-400">Jagadish</span>
-        </h1>
-
-        {/* Typing Animation */}
-        <ReactTyped
-          strings={[
-            "MERN Stack Developer",
-            "Freelancer",
-            "UI/UX Designer",
-          ]}
-          typeSpeed={70}
-          backSpeed={40}
-          backDelay={1600}
-          loop
-          className="text-2xl md:text-3xl font-medium mb-8 block text-gray-100 dark:text-yellow-100 drop-shadow-lg"
-        />
-
-        {/* Call To Action */}
-        <a
-          href="#projects"
-          data-aos="zoom-in"
-          data-aos-delay="400"
-          className="bg-yellow-400 text-black px-8 py-4 rounded-full font-semibold shadow-xl hover:bg-yellow-300 hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 animate-pulse"
-        >
-          View My Work
-        </a>
+      {/* Animated Background Lines */}
+      <div className="fixed top-0 left-0 w-full h-full -z-1 flex">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div
+            key={i}
+            className="flex-1 border-r border-[#EAEAF2] opacity-80 relative"
+          ></div>
+        ))}
       </div>
-    </section>
+
+      {/* Custom Keyframes */}
+      <style>
+        {`
+          @keyframes letterAnim {
+            0% {
+              letter-spacing: 2.5em;
+              opacity: 0;
+            }
+            40% {
+              opacity: 1;
+              letter-spacing: 0.5em;
+            }
+            70% {
+              letter-spacing: 0.75em;
+            }
+            100% {
+              letter-spacing: 2.5em;
+            }
+          }
+        `}
+      </style>
+    </div>
   );
 };
 
-export default Hero;
+export default HeroSection;
